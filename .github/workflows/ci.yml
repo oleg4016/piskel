@@ -4,41 +4,16 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-  workflow_dispatch: # Позволяет запускать тесты вручную кнопкой
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm' # Кэширование зависимостей ускоряет последующие сборки
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Run E2E tests
-        run: npm run test-ci
-
-      # Этот шаг сохранит отчет о тестах, если они упадут.
-      # Вы сможете скачать его во вкладке Actions (раздел Artifacts).
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: always() # Отчет будет создан даже если тесты упали
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm run test-ci
