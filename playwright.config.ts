@@ -5,11 +5,12 @@ const baseUrl = 'http://localhost:9001';
 export default defineConfig({
   testDir: 'tests/e2e/playwright',
   outputDir: 'tests/e2e/playwright/tmp',
-  retries: 5,
+  snapshotPathTemplate: '{testDir}/{testFileDir}/snapshots/{arg}{ext}',
+  retries: 3,
 
   // Run a local server before starting the tests
   webServer: {
-    command: 'npm run prod:test',
+    command: 'npm run start:test',
     url: baseUrl,
     reuseExistingServer: true,
     stdout: 'ignore',
